@@ -77,16 +77,16 @@
                      keyfile="${user.home}/.ssh/id_rsa"
                      passphrase=""
                      trust="true"/>
-               <!-- <sshexec host="192.168.0.24"
+               <sshexec host="192.168.0.24"
                          username="pi"
                          keyfile="${user.home}/.ssh/id_rsa"
-                         command="sudo pkill -f 'java.*garageOpener*'"
+                         command="sudo pkill -f 'java.*climate-service*'"
                          trust="true"/>
                 <sshexec host="192.168.0.24"
                          username="pi"
                          keyfile="${user.home}/.ssh/id_rsa"
-                         command="sudo nohup java -jar /home/pi/com/bigboxer23/garageOpener/1.0.0/garageOpener-1.0.0.jar &amp;"
-                         trust="true"/>-->
+                         command="sudo nohup java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar &amp;"
+                         trust="true"/>
               </target>
             </configuration>
           </execution>
