@@ -35,7 +35,7 @@ public class ClimateController
 	@GetMapping(path = "/climate", produces = "application/json;charset=UTF-8")
 	public Map<String, Float> getClimateData()
 	{
-		myLogger.info("climate data fetched");
+		myLogger.debug("Climate data requested");
 		return myBME680Controller.getClimateData();
 	}
 }
