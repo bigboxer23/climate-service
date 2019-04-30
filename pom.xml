@@ -68,21 +68,21 @@
             <configuration>
               <target>
                 <scp file="${project.basedir}/target/climate-service-1.0.0.jar"
-                     todir="pi@192.168.0.24:/home/pi/com/bigboxer23/climate-service/1.0.0"
+                     todir="pi@${host}:/home/pi/com/bigboxer23/climate-service/1.0.0"
                      keyfile="${user.home}/.ssh/id_rsa"
                      passphrase=""
                      trust="true"/>
                 <scp file="${project.basedir}/keystore.p12"
-                     todir="pi@192.168.0.24:/home/pi/"
+                     todir="pi@${host}:/home/pi/"
                      keyfile="${user.home}/.ssh/id_rsa"
                      passphrase=""
                      trust="true"/>
-               <sshexec host="192.168.0.24"
+               <sshexec host="${host}"
                          username="pi"
                          keyfile="${user.home}/.ssh/id_rsa"
                          command="sudo pkill -f 'java.*climate-service*'"
                          trust="true"/>
-                <sshexec host="192.168.0.24"
+                <sshexec host="${host}"
                          username="pi"
                          keyfile="${user.home}/.ssh/id_rsa"
                          command="sudo nohup java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar &amp;"
@@ -104,7 +104,34 @@
           </dependency>
         </dependencies>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <files>
+                <file>${basedir}/src/main/resources/application.properties</file>
+              </files>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>properties-maven-plugin</artifactId>
+          <version>1.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <extensions>
       <!-- Enabling the use of SSH -->
       <extension>
