@@ -26,12 +26,23 @@ public class BME680Controller implements IBME680Constants
 
 	private Cache<Long, Map<String, Float>> myClimateCache;
 
+	private Map<String, Float> myMaxValues;
+
+	private Map<String, Float> myMinValues;
+
 	public BME680Controller()
 	{
 		myClimateCache = CacheBuilder
 				.newBuilder()
 				.maximumSize(30)
 				.build();
+		myMaxValues = new HashMap<>();
+		myMinValues = new HashMap<>();
+		kClimateItems.forEach(theS ->
+		{
+			myMinValues.put(theS, Float.MAX_VALUE);
+			myMaxValues.put(theS, 0f);
+		});
 		startSensorProcess();
 	}
 
@@ -60,6 +71,11 @@ public class BME680Controller implements IBME680Constants
 			aData.put(kClimateItems.get(ai), Float.parseFloat(aContent[ai].split(" ")[0]));
 		}
 		normalizeQuality(aData);
+		aData.forEach((k, v) ->
+		{
+			myMaxValues.computeIfPresent(k, (k2, v2) -> Math.max(v, v2));
+			myMinValues.computeIfPresent(k, (k2, v2) -> Math.min(v, v2));
+		});
 		myClimateCache.put(System.currentTimeMillis(), aData);
 	}
 
@@ -84,6 +100,16 @@ public class BME680Controller implements IBME680Constants
 		}));
 		kClimateItems.forEach(theItem -> aData.put(theItem, aData.get(theItem) / aList.size()));
 		return aData;
+	}
+
+	public Map<String, Float> getMaxValues()
+	{
+		return myMaxValues;
+	}
+
+	public Map<String, Float> getMinValues()
+	{
+		return myMinValues;
 	}
 
 	/**

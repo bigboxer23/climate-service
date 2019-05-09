@@ -60,6 +60,20 @@ public class ClimateController implements IBME680Constants
 		return myBME680Controller.getClimateData();
 	}
 
+	@GetMapping(path = "/climate/max", produces = "application/json;charset=UTF-8")
+	public Map<String, Float> getMaxValues()
+	{
+		myLogger.debug("max data requested");
+		return myBME680Controller.getMaxValues();
+	}
+
+	@GetMapping(path = "/climate/min", produces = "application/json;charset=UTF-8")
+	public Map<String, Float> getMinValues()
+	{
+		myLogger.debug("min data requested");
+		return myBME680Controller.getMinValues();
+	}
+
 	@Scheduled(fixedDelay = 30000)
 	private void sendClimateData()
 	{
