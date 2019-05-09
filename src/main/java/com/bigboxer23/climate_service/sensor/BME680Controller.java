@@ -20,20 +20,9 @@ import java.util.Map;
  * sensor readings in cache and returns average of those when requested
  */
 @Component
-public class BME680Controller
+public class BME680Controller implements IBME680Constants
 {
 	private static final Logger myLogger = LoggerFactory.getLogger(ClimateController.class);
-
-	/**
-	 * Various sensors we get readings about
-	 */
-	private static final List<String> kClimateItems = new ArrayList<String>()
-	{{
-		add("temperature");
-		add("pressure");
-		add("humidity");
-		add("quality");
-	}};
 
 	private Cache<Long, Map<String, Float>> myClimateCache;
 

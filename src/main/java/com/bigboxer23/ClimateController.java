@@ -1,6 +1,7 @@
 package com.bigboxer23;
 
 import com.bigboxer23.climate_service.sensor.BME680Controller;
+import com.bigboxer23.climate_service.sensor.IBME680Constants;
 import com.bigboxer23.util.http.HttpClientUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @EnableAutoConfiguration
-public class ClimateController
+public class ClimateController implements IBME680Constants
 {
 	private static final Logger myLogger = LoggerFactory.getLogger(ClimateController.class);
 
@@ -50,7 +51,7 @@ public class ClimateController
 	/**
 	 * Get JSON climate data
 	 *
-	 * @return
+	 * @return temp, humidity, pressure, quality
 	 */
 	@GetMapping(path = "/climate", produces = "application/json;charset=UTF-8")
 	public Map<String, Float> getClimateData()
@@ -97,15 +98,16 @@ public class ClimateController
 	/**
 	 * true if step moves +- more than .25
 	 *
-	 * @param theName
-	 * @param theNewValue
-	 * @return
+	 * @param theName the sensor name
+	 * @param theNewValue the proposed value
+	 * @return is there enough  variance to warrant an update?
 	 */
 	private boolean shouldUpdate(String theName, float theNewValue)
 	{
-		float aLastValue  = myLastSentValues.computeIfAbsent(theName, k -> theNewValue);
+		float aLastValue  = myLastSentValues.getOrDefault(theName, 0f);
 		myLogger.debug(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
-		if (theNewValue - aLastValue > .25 || theNewValue - aLastValue < -.25)
+		if (theNewValue - aLastValue > kStepSensitivity.getOrDefault(theName, .25f)
+				|| theNewValue - aLastValue < -(kStepSensitivity.getOrDefault(theName, .25f)))
 		{
 			myLogger.info(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
 			myLastSentValues.put(theName,  theNewValue);
