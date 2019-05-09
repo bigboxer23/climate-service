@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,6 +27,8 @@ import java.util.Map;
 public class ClimateController
 {
 	private static final Logger myLogger = LoggerFactory.getLogger(ClimateController.class);
+
+	private Map<String, Float> myLastSentValues = new HashMap<>();
 
 	/**
 	 * Location of OpenHAB
@@ -65,6 +68,10 @@ public class ClimateController
 		}
 		myBME680Controller.getClimateData().forEach((theData, theValue) ->
 		{
+			if (!shouldUpdate(theData, theValue))
+			{
+				return;
+			}
 			HttpPost aHttpPost = new HttpPost(kOpenHABUrl + "/rest/items/" + kSensorName + capitalizeFirstLetter(theData));
 			try
 			{
@@ -85,5 +92,25 @@ public class ClimateController
 			return theString;
 		}
 		return theString.substring(0, 1).toUpperCase() + theString.substring(1);
+	}
+
+	/**
+	 * true if step moves +- more than .25
+	 *
+	 * @param theName
+	 * @param theNewValue
+	 * @return
+	 */
+	private boolean shouldUpdate(String theName, float theNewValue)
+	{
+		float aLastValue  = myLastSentValues.computeIfAbsent(theName, k -> theNewValue);
+		myLogger.debug(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
+		if (theNewValue - aLastValue > .25 || theNewValue - aLastValue < -.25)
+		{
+			myLogger.info(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
+			myLastSentValues.put(theName,  theNewValue);
+			return true;
+		}
+		return false;
 	}
 }

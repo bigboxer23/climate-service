@@ -70,7 +70,13 @@ public class BME680Controller
 		{
 			aData.put(kClimateItems.get(ai), Float.parseFloat(aContent[ai].split(" ")[0]));
 		}
+		normalizeQuality(aData);
 		myClimateCache.put(System.currentTimeMillis(), aData);
+	}
+
+	private void normalizeQuality(Map<String, Float> theData)
+	{
+		theData.computeIfPresent("quality", (k, v) ->  v / 1000);
 	}
 
 	/**
@@ -113,7 +119,7 @@ public class BME680Controller
 		}
 		catch (IOException theE)
 		{
-			theE.printStackTrace();
+			myLogger.warn("startSensorProcess ", theE);
 		}
 	}
 }
