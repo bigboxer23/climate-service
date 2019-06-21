@@ -31,6 +31,8 @@ public class ClimateController implements IBME680Constants
 
 	private Map<String, Float> myLastSentValues = new HashMap<>();
 
+	private boolean myForceUpdate = false;
+
 	/**
 	 * Location of OpenHAB
 	 */
@@ -75,6 +77,14 @@ public class ClimateController implements IBME680Constants
 	}
 
 	@GetMapping(path = "/climate/forceUpdate")
+	private void forceUpdate()
+	{
+		myLogger.warn("Triggering force update.");
+		myForceUpdate = true;
+		sendClimateData();
+		myForceUpdate = false;
+	}
+
 	@Scheduled(fixedDelay = 30000)
 	private void sendClimateData()
 	{
@@ -99,6 +109,7 @@ public class ClimateController implements IBME680Constants
 			}
 			HttpClientUtils.execute(aHttpPost);
 		});
+		myForceUpdate = false;
 	}
 
 	private String capitalizeFirstLetter(String theString)
@@ -119,6 +130,10 @@ public class ClimateController implements IBME680Constants
 	 */
 	private boolean shouldUpdate(String theName, float theNewValue)
 	{
+		if (myForceUpdate)
+		{
+			return true;
+		}
 		float aLastValue  = myLastSentValues.getOrDefault(theName, 0f);
 		myLogger.debug(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
 		if (theNewValue - aLastValue > kStepSensitivity.getOrDefault(theName, .25f)
