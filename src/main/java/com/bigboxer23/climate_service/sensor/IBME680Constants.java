@@ -23,7 +23,7 @@ public interface IBME680Constants
 
 	Map<String, Float> kStepSensitivity = new HashMap<String, Float>()
 	{{
-		put("humidity", .5f);
-		put("quality", 5f);
+		put("humidity", 1f);
+		put("quality", 10f);
 	}};
 }

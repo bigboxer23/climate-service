@@ -74,6 +74,7 @@ public class ClimateController implements IBME680Constants
 		return myBME680Controller.getMinValues();
 	}
 
+	@GetMapping(path = "/climate/forceUpdate")
 	@Scheduled(fixedDelay = 30000)
 	private void sendClimateData()
 	{
