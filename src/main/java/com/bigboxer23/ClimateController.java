@@ -139,7 +139,7 @@ public class ClimateController implements IBME680Constants
 		if (theNewValue - aLastValue > kStepSensitivity.getOrDefault(theName, .25f)
 				|| theNewValue - aLastValue < -(kStepSensitivity.getOrDefault(theName, .25f)))
 		{
-			myLogger.info(theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
+			myLogger.info(kSensorName + " " + theName + " sensor values, new:" + theNewValue + ", previous:" + aLastValue);
 			myLastSentValues.put(theName,  theNewValue);
 			return true;
 		}
