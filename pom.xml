@@ -141,23 +141,18 @@
             <formatAnnotations/>
           </java>
           <pom>
-            <!-- These are the defaults, you can override if you want -->
             <includes>
               <include>pom.xml</include>
             </includes>
             <sortPom>
               <expandEmptyElements>false</expandEmptyElements>
             </sortPom>
-            <!-- has its own section below -->
           </pom>
           <markdown>
             <includes>
-              <!-- You have to set the target manually -->
               <include>*.md</include>
             </includes>
-
             <flexmark/>
-            <!-- has its own section below -->
           </markdown>
         </configuration>
         <executions>
