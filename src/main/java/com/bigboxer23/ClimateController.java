@@ -2,7 +2,7 @@ package com.bigboxer23;
 
 import com.bigboxer23.climate_service.sensor.BME680Controller;
 import com.bigboxer23.climate_service.sensor.IBME680Constants;
-import com.bigboxer23.util.http.HttpClientUtils;
+import com.bigboxer23.utils.http.HttpClientUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
