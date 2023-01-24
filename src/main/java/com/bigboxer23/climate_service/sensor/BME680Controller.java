@@ -99,7 +99,7 @@ public class BME680Controller implements IBME680Constants {
 	private void startSensorProcess() {
 		try {
 			new ProcessExecutor()
-					.command("python", "-u", "/home/pi/com/bigboxer23/climate-service/1.0.0/read-all.py")
+					.command("python3", "-u", "/home/pi/com/bigboxer23/climate-service/1.0.0/read-all.py")
 					.redirectOutput(new LogOutputStream() {
 						@Override
 						protected void processLine(String theLine) {
