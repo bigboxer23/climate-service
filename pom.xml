@@ -126,20 +126,6 @@
         <artifactId>spotless-maven-plugin</artifactId>
         <version>2.30.0</version>
         <configuration>
-          <formats>
-            <format>
-              <includes>
-                <include>*.md</include>
-                <include>.gitignore</include>
-              </includes>
-              <trimTrailingWhitespace/>
-              <endWithNewline/>
-              <indent>
-                <tabs>true</tabs>
-                <spacesPerTab>4</spacesPerTab>
-              </indent>
-            </format>
-          </formats>
           <java>
             <googleJavaFormat>
               <version>1.15.0</version>
@@ -164,6 +150,15 @@
             </sortPom>
             <!-- has its own section below -->
           </pom>
+          <markdown>
+            <includes>
+              <!-- You have to set the target manually -->
+              <include>*.md</include>
+            </includes>
+
+            <flexmark/>
+            <!-- has its own section below -->
+          </markdown>
         </configuration>
         <executions>
           <execution>
