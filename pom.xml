@@ -1,17 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.bigboxer23</groupId>
-  <artifactId>climate-service</artifactId>
-  <packaging>jar</packaging>
-  <version>1.0.0</version>
-  <name>climate-service</name>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.7</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
+    <!-- lookup parent from repository -->
   </parent>
+  <groupId>com.bigboxer23</groupId>
+  <artifactId>climate-service</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <name>climate-service</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -27,15 +28,15 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-	  <dependency>
-		  <groupId>org.springdoc</groupId>
-		  <artifactId>springdoc-openapi-ui</artifactId>
-		  <version>1.6.14</version>
-	  </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.6.14</version>
+    </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.4.5</version>
+      <version>1.2.11</version>
     </dependency>
     <dependency>
       <groupId>net.logstash.logback</groupId>
@@ -52,13 +53,22 @@
       <artifactId>guava</artifactId>
       <version>31.1-jre</version>
     </dependency>
-	  <dependency>
-		  <groupId>com.bigboxer23</groupId>
-		  <artifactId>utils</artifactId>
-		  <version>2.0.1</version>
-	  </dependency>
+    <dependency>
+      <groupId>com.bigboxer23</groupId>
+      <artifactId>utils</artifactId>
+      <version>2.0.1</version>
+    </dependency>
   </dependencies>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>properties-maven-plugin</artifactId>
+          <version>1.1.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -68,39 +78,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>scp-to-remote</id>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <scp file="${project.basedir}/target/climate-service-1.0.0.jar"
-                     todir="pi@${host}:/home/pi/com/bigboxer23/climate-service/1.0.0"
-                     keyfile="${user.home}/.ssh/id_rsa"
-                     passphrase=""
-                     trust="true"/>
-                <scp file="${project.basedir}/keystore.p12"
-                     todir="pi@${host}:/home/pi/"
-                     keyfile="${user.home}/.ssh/id_rsa"
-                     passphrase=""
-                     trust="true"/>
-               <sshexec host="${host}"
-                         username="pi"
-                         keyfile="${user.home}/.ssh/id_rsa"
-                         command="sudo pkill -f 'java.*climate-service*'"
-                         trust="true"/>
-                <sshexec host="${host}"
-                         username="pi"
-                         keyfile="${user.home}/.ssh/id_rsa"
-                         command="sudo nohup java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar &amp;"
-                         trust="true"/>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
         <dependencies>
           <dependency>
             <groupId>com.jcraft</groupId>
@@ -113,6 +90,23 @@
             <version>1.6.5</version>
           </dependency>
         </dependencies>
+        <executions>
+          <execution>
+            <id>scp-to-remote</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <scp file="${project.basedir}/target/climate-service-1.0.0.jar" keyfile="${user.home}/.ssh/id_rsa" passphrase="" todir="pi@${host}:/home/pi/com/bigboxer23/climate-service/1.0.0" trust="true"/>
+                <scp file="${project.basedir}/keystore.p12" keyfile="${user.home}/.ssh/id_rsa" passphrase="" todir="pi@${host}:/home/pi/" trust="true"/>
+                <sshexec command="sudo pkill -f 'java.*climate-service*'" host="${host}" keyfile="${user.home}/.ssh/id_rsa" trust="true" username="pi"/>
+                <sshexec command="sudo nohup java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar &amp;" host="${host}" keyfile="${user.home}/.ssh/id_rsa" trust="true" username="pi"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -120,10 +114,10 @@
         <version>1.1.0</version>
         <executions>
           <execution>
-            <phase>initialize</phase>
             <goals>
               <goal>read-project-properties</goal>
             </goals>
+            <phase>initialize</phase>
             <configuration>
               <files>
                 <file>${basedir}/src/main/resources/application.properties</file>
@@ -132,16 +126,60 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.30.0</version>
+        <configuration>
+          <formats>
+            <format>
+              <includes>
+                <include>*.md</include>
+                <include>.gitignore</include>
+              </includes>
+              <trimTrailingWhitespace/>
+              <endWithNewline/>
+              <indent>
+                <tabs>true</tabs>
+                <spacesPerTab>4</spacesPerTab>
+              </indent>
+            </format>
+          </formats>
+          <java>
+            <googleJavaFormat>
+              <version>1.15.0</version>
+              <style>AOSP</style>
+              <reflowLongStrings>true</reflowLongStrings>
+            </googleJavaFormat>
+            <palantirJavaFormat/>
+            <indent>
+              <tabs>true</tabs>
+              <spacesPerTab>4</spacesPerTab>
+            </indent>
+            <removeUnusedImports/>
+            <formatAnnotations/>
+          </java>
+          <pom>
+            <!-- These are the defaults, you can override if you want -->
+            <includes>
+              <include>pom.xml</include>
+            </includes>
+            <sortPom>
+              <expandEmptyElements>false</expandEmptyElements>
+            </sortPom>
+            <!-- has its own section below -->
+          </pom>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>properties-maven-plugin</artifactId>
-          <version>1.1.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <extensions>
       <!-- Enabling the use of SSH -->
       <extension>

@@ -4,20 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-/**
- * Hello climate!
- */
+/** Hello climate! */
 @SpringBootApplication
 @EnableScheduling
-public class App
-{
-	public static void main(String[] args)
-	{
+public class App {
+	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
 
-	public App()
-	{
-
-	}
+	public App() {}
 }
