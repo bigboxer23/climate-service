@@ -5,7 +5,7 @@ via a web url returning JSON formatted data.
 
 Another good resource on the sensor: `https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout`
 
-Running `install.sh` will install and utilize pimoroni's python code to read from this sensor.  
+Running `install.sh` will install and utilize pimoroni's python code to read from this sensor.
 
 Properties to define:
 ```server.port: 443
