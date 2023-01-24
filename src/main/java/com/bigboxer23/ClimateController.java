@@ -50,7 +50,7 @@ public class ClimateController implements IBME680Constants {
 	 */
 	@GetMapping(path = "/climate", produces = "application/json;charset=UTF-8")
 	public Map<String, Float> getClimateData() {
-		myLogger.info("Climate data requested");
+		myLogger.debug("Climate data requested");
 		return myBME680Controller.getClimateData();
 	}
 
@@ -80,7 +80,7 @@ public class ClimateController implements IBME680Constants {
 			myLogger.warn("not sending climate data, sensor or OH not setup.");
 			return;
 		}
-		myLogger.warn("getting climate data");
+		myLogger.debug("getting climate data");
 		myBME680Controller.getClimateData().forEach((theData, theValue) -> {
 			if (!shouldUpdate(theData, theValue)) {
 				return;
