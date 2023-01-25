@@ -152,6 +152,9 @@
             <includes>
               <include>*.md</include>
             </includes>
+            <excludes>
+              <exclude>license.md</exclude>
+            </excludes>
             <flexmark/>
           </markdown>
         </configuration>
