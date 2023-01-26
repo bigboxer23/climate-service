@@ -3,11 +3,10 @@ package com.bigboxer23.climate_service.sensor;
 import com.bigboxer23.ClimateController;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +27,10 @@ public class BME680Controller implements IBME680Constants {
 
 	private Map<String, Float> myMinValues;
 
+	private String pathToPythonScript;
+
+	private static final String PYTHON_FILE_NAME = "read-all.py";
+
 	public BME680Controller() {
 		myClimateCache = CacheBuilder.newBuilder().maximumSize(30).build();
 		myMaxValues = new HashMap<>();
@@ -36,9 +39,22 @@ public class BME680Controller implements IBME680Constants {
 			myMinValues.put(theS, Float.MAX_VALUE);
 			myMaxValues.put(theS, 0f);
 		});
+		initPythonScript();
 		startSensorProcess();
 	}
 
+	private void initPythonScript() {
+		File pythonFile = new File(System.getProperty("user.dir") + File.separator + PYTHON_FILE_NAME);
+		pythonFile.delete();
+		try {
+			FileUtils.copyInputStreamToFile(
+					Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(PYTHON_FILE_NAME)),
+					pythonFile);
+		} catch (IOException e) {
+			myLogger.warn("initPythonScript", e);
+		}
+		pathToPythonScript = pythonFile.getAbsolutePath();
+	}
 	/**
 	 * Data formatted like `19.73 C,985.42 hPa,39.04 %RH,10370 Ohm`
 	 *
@@ -99,7 +115,7 @@ public class BME680Controller implements IBME680Constants {
 	private void startSensorProcess() {
 		try {
 			new ProcessExecutor()
-					.command("python3", "-u", "/home/pi/com/bigboxer23/climate-service/1.0.0/read-all.py")
+					.command("python3", "-u", pathToPythonScript)
 					.redirectOutput(new LogOutputStream() {
 						@Override
 						protected void processLine(String theLine) {
