@@ -1,3 +1,5 @@
+[![CodeQL](https://github.com/bigboxer23/climate-service/actions/workflows/codeql.yml/badge.svg)](https://github.com/bigboxer23/climate-service/actions/workflows/codeql.yml)
+
 ## Introduction
 
 Sprint Boot WebService wrapper around a BME680 Climate Sensor running on a Raspberry Pi
