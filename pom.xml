@@ -54,6 +54,13 @@
       <version>2.0.1</version>
     </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>github</id>
+      <name>GitHub bigboxer23 Maven Packages</name>
+      <url>https://maven.pkg.github.com/bigboxer23/_</url>
+    </repository>
+  </repositories>
   <build>
     <pluginManagement>
       <plugins>
