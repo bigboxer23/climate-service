@@ -9,6 +9,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' || github.actor == 'bigboxer23'}}
     permissions:
       actions: read
       contents: read
