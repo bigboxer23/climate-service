@@ -2,14 +2,14 @@ package com.bigboxer23;
 
 import com.bigboxer23.climate_service.sensor.BME680Controller;
 import com.bigboxer23.climate_service.sensor.IBME680Constants;
-import com.bigboxer23.utils.http.HttpClientUtils;
-import java.io.UnsupportedEncodingException;
+import com.bigboxer23.utils.http.OkHttpUtil;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,16 +85,23 @@ public class ClimateController implements IBME680Constants {
 			if (!shouldUpdate(theData, theValue)) {
 				return;
 			}
-			HttpPost aHttpPost =
-					new HttpPost(kOpenHABUrl + "/rest/items/" + kSensorName + capitalizeFirstLetter(theData));
 			try {
-				aHttpPost.setEntity(
-						new ByteArrayEntity(URLDecoder.decode("" + theValue, StandardCharsets.UTF_8.displayName())
-								.getBytes(StandardCharsets.UTF_8)));
-			} catch (UnsupportedEncodingException theE) {
-				myLogger.warn("OpenHABController:doAction", theE);
+				try (Response response = OkHttpUtil.postSynchronous(
+						kOpenHABUrl + "/rest/items/" + kSensorName + capitalizeFirstLetter(theData),
+						RequestBody.create(URLDecoder.decode("" + theValue, StandardCharsets.UTF_8.displayName())
+								.getBytes(StandardCharsets.UTF_8)),
+						null)) {
+					if (!response.isSuccessful()) {
+						myLogger.warn("trouble with response. "
+								+ response.code()
+								+ " body: "
+								+ response.body().string());
+					}
+				}
+
+			} catch (IOException e) {
+				myLogger.warn("OpenHABController:doAction", e);
 			}
-			HttpClientUtils.execute(aHttpPost);
 		});
 		myForceUpdate = false;
 	}
