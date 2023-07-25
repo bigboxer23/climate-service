@@ -51,7 +51,7 @@
     <dependency>
       <groupId>com.bigboxer23</groupId>
       <artifactId>utils</artifactId>
-      <version>2.0.5</version>
+      <version>2.0.15</version>
     </dependency>
   </dependencies>
   <repositories>
@@ -103,8 +103,7 @@
               <target>
                 <scp file="${project.basedir}/target/climate-service-1.0.0.jar" keyfile="${user.home}/.ssh/id_rsa" passphrase="" todir="pi@${host}:/home/pi/com/bigboxer23/climate-service/1.0.0" trust="true"/>
                 <scp file="${project.basedir}/keystore.p12" keyfile="${user.home}/.ssh/id_rsa" passphrase="" todir="pi@${host}:/home/pi/" trust="true"/>
-                <sshexec command="sudo pkill -f 'java.*climate-service*'" host="${host}" keyfile="${user.home}/.ssh/id_rsa" trust="true" username="pi"/>
-                <sshexec command="sudo nohup java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar &amp;" host="${host}" keyfile="${user.home}/.ssh/id_rsa" trust="true" username="pi"/>
+                <sshexec command="sudo systemctl restart climate-service.service" host="${host}" keyfile="${user.home}/.ssh/id_rsa" trust="true" username="pi"/>
               </target>
             </configuration>
           </execution>
