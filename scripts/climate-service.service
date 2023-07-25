@@ -1,0 +1,8 @@
+[Unit]
+Description=start meural server on boot
+After=multi-user.target
+[Service]
+ExecStart=java -jar /home/pi/com/bigboxer23/climate-service/1.0.0/climate-service-1.0.0.jar
+User=pi
+[Install]
+WantedBy=multi-user.target

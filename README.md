@@ -12,10 +12,11 @@ Another good resource on the sensor: `https://learn.pimoroni.com/tutorial/sandyj
 
 ## Installation
 
-1) Install BME Library
-2) `sudo apt-get install pip`
-3) `sudo pip install bme680`
-4) Create application.properties in `src/main/resources`
+1. Install BME Library
+2. `sudo apt-get install pip`
+3. `sudo pip install bme680`
+4. Create application.properties in `src/main/resources`
+5. run `install.sh` script to transfer exe, setup service
 
 ```server.port: 443
 server.ssl.key-store: keystore.p12
