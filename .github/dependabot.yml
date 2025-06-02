@@ -10,9 +10,19 @@ registries:
     username: bigboxer23
     password: ${{secrets.GH_PAT_FOR_ACTIONS_TOKEN}}
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "maven"
+    directory: "/"
     registries:
       - maven-github
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "deps"
+    groups:
+      minor-patch-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+      major-dependencies:
+        update-types:
+          - "major"
