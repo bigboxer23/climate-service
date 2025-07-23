@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.bigboxer23</groupId>
   <artifactId>climate-service</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
   <name>climate-service</name>
   <url>http://maven.apache.org</url>
