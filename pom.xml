@@ -46,7 +46,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>33.7.1-jre</version>
+      <version>33.7.2-jre</version>
     </dependency>
     <dependency>
       <groupId>com.bigboxer23</groupId>
@@ -136,7 +136,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>3.10.2</version>
+        <version>3.10.3</version>
         <configuration>
           <java>
             <googleJavaFormat>
